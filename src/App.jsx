@@ -72,8 +72,7 @@ function App() {
   // -- Connection Handlers --
   const handleIncomingConnection = (connection) => {
     setConn(connection)
-    setScreen('chat')
-    setStatus('Connected')
+    setStatus('Incoming connection...')
     setupConnectionListeners(connection)
   }
 
@@ -85,6 +84,14 @@ function App() {
     const connection = peerRef.current.connect(peerId)
     setConn(connection)
     setupConnectionListeners(connection)
+
+    // Connection Timeout
+    setTimeout(() => {
+      if (!connection.open) {
+        setStatus('Connection timed out. Retrying might help.')
+        setErrorObj({ message: 'Connection timed out. Firewalls might be blocking P2P.' })
+      }
+    }, 10000)
   }
 
   const setupConnectionListeners = (connection) => {

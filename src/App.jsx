@@ -26,7 +26,15 @@ function App() {
     if (peerRef.current) peerRef.current.destroy()
     setErrorObj(null)
 
-    const peer = idToUse ? new Peer(idToUse) : new Peer()
+    const peerConfig = {
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:global.stun.twilio.com:3478' }
+        ]
+      }
+    }
+    const peer = idToUse ? new Peer(idToUse, peerConfig) : new Peer(peerConfig)
     setStatus('Connecting to server...')
 
     peer.on('open', (id) => {
